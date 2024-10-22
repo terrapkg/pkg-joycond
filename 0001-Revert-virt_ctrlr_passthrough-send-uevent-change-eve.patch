@@ -1,0 +1,30 @@
+From 52a8581c4b5bfac8cea0f60d76a3be60018a1974 Mon Sep 17 00:00:00 2001
+From: Cappy Ishihara <cappy@cappuchino.xyz>
+Date: Wed, 23 Oct 2024 03:36:34 +0700
+Subject: [PATCH] Revert "virt_ctrlr_passthrough: send uevent change event when
+ unlocked"
+
+This reverts commit cdec32865c6093bd4761326ea461aaa2fcf7d1b4.
+---
+ src/virt_ctlr_passthrough.cpp | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/src/virt_ctlr_passthrough.cpp b/src/virt_ctlr_passthrough.cpp
+index ff8218d..9e9a975 100644
+--- a/src/virt_ctlr_passthrough.cpp
++++ b/src/virt_ctlr_passthrough.cpp
+@@ -14,11 +14,6 @@ virt_ctlr_passthrough::virt_ctlr_passthrough(std::shared_ptr<phys_ctlr> phys) :
+     // Allow other processes to use the input now.
+     if (fchmod(phys->get_fd(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH))
+         std::cerr << "Failed to change evdev permissions; " << strerror(errno) << std::endl;
+-    // Inform other processes the input is usable now.
+-    std::ofstream uevent;
+-    uevent.open("/sys" + phys->get_devpath() + "/uevent");
+-    uevent << "change";
+-    uevent.close();
+     phys->ungrab();
+ }
+ 
+-- 
+2.47.0
+
