@@ -1,0 +1,43 @@
+From b89cf1d99c844d346e4dff49ccfba77b0bc28eba Mon Sep 17 00:00:00 2001
+From: Cappy Ishihara <cappy@cappuchino.xyz>
+Date: Fri, 2 May 2025 17:08:46 +0700
+Subject: [PATCH] Change permissions for hidraw access
+
+Co-authored-by: florianmarsch <dekontaminator@googlemail.com>
+---
+ udev/89-joycond.rules | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/udev/89-joycond.rules b/udev/89-joycond.rules
+index 85195b9..c7013a0 100644
+--- a/udev/89-joycond.rules
++++ b/udev/89-joycond.rules
+@@ -1,18 +1,17 @@
+ # Keep steam from accessing hidraw for pro controller
+ # Nintendo Switch Pro Controller over USB hidraw
+-KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0600", TAG-="uaccess", RUN+="/bin/setfacl -b /dev/%k"
++KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0666", TAG-="uaccess", RUN+="/bin/setfacl -b /dev/%k"
+ # Nintendo Switch Pro Controller over bluetooth hidraw
+-KERNEL=="hidraw*", KERNELS=="*057E:2009*", MODE="0600", TAG-="uaccess", RUN+="/bin/setfacl -b /dev/%k"
++KERNEL=="hidraw*", KERNELS=="*057E:2009*", MODE="0666", TAG-="uaccess", RUN+="/bin/setfacl -b /dev/%k"
+ 
+ 
+ ACTION!="add", GOTO="joycond_end"
+ SUBSYSTEM!="input", GOTO="joycond_end"
+ KERNEL!="event*", GOTO="joycond_end"
+-ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2009", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0600"
+-ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2006", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0600"
+-ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2007", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0600"
+-ATTRS{id/vendor}=="057e", ATTRS{id/product}=="200e", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0600"
+-ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2017", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0600"
+-ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2019", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0600"
++ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2009", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0666"
++ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2006", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0666"
++ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2007", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0666"
++ATTRS{id/vendor}=="057e", ATTRS{id/product}=="200e", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0666"
++ATTRS{id/vendor}=="057e", ATTRS{id/product}=="2017", ATTRS{name}!="*Combined*", ATTRS{name}!="*Virtual*", ATTRS{name}!="*IMU*", TAG+="joycond", MODE="0666"
+ 
+ LABEL="joycond_end"
+-- 
+2.49.0
+
